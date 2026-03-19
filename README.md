@@ -1,1 +1,1 @@
-# genetic-algorithm
+# Genetic Algorithm
