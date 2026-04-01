@@ -1,28 +1,44 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import time
 import sys
 import random
 
+"""
+GENEROWANIE ROZWIĄZAŃ
+SPRAWDZANIE WAGI
+"""
+
+weights = []
+prices = []
+
+print("Prease enter number of the elements in the knapsack: ")
+EL_NUM = int(input())
+
+print("Prease enter weights: ")
+for i in range(EL_NUM):
+    x  = int(input())
+    weights.append(x)
+
+print("Prease enter prices: ")
+for i in range(EL_NUM):
+    x  = int(input())
+    prices.append(x)
+
+print("Prease enter the maximum weight: ")
+MAX_WEIGHT = int(input())
 
 print("Prease enter the maximum number of generations: ")
 MAX_GEN = int(input())
-MAX_WEIGHT = 0
-MUTATION_PROBABILITY = 0.05
-
-
-weights = [1, 2, 5, 4, 6, 3, 7, 8, 10, 4]
-prices = [1, 6, 11, 4, 5, 1, 3, 7, 2, 3]
-
+print("Prease enter mutation probability: ")
+MUTATION_PROBABILITY = float(input())
 
 population = []
 buffor = []
 
-
 class chromosome:
-   def __init__(self, fitness, code):
-       self.fitness = fitness #niech sam się liczy
+   def __init__(self, code):
        self.code = code
+       self.fitness = count_f(self.code)
        self.range_up = 0
        self.range_down = 0
 
@@ -74,13 +90,13 @@ def crossing_over(parent_1, parent_2):
 
    print(parent_1[0:point] + " " + parent_2[point:])
    chr_1 = parent_1[0:point] + parent_2[point:]
-   child_1 = chromosome(count_f(chr_1.strip()), chr_1.strip())
+   child_1 = chromosome(chr_1.strip())
    buffor.append(child_1)
 
 
    print(parent_2[0:point] + " " + parent_1[point:])
    chr_2 = parent_2[0:point] + parent_1[point:]
-   child_2 = chromosome(count_f(chr_2.strip()), chr_2)
+   child_2 = chromosome(chr_2)
    buffor.append(child_2)
 
 
@@ -94,12 +110,21 @@ def mutation (chr):
                bit = 1
            print ("Mutation occured! ")
 
+#FIRST POPULATION - RANDOM SOLUTIONS
+print("Please enter size of the population: ")
+x = int(input())
+for i in range(x):
+    code = np.random.randint(2, size=EL_NUM)
+    while(count_weight(code) > MAX_WEIGHT):
+        code = np.random.randint(2, size=EL_NUM)
+    new = chromosome(code)
+    population.append(new)
 
-filename = sys.argv[1]
-with open(filename) as file:
-   for line in file:
-       new = chromosome(count_f(line.strip()), line.strip())
-       population.append(new)
+#filename = sys.argv[1]
+#with open(filename) as file:
+ #  for line in file:
+  #     new = chromosome(line.strip())
+   #    population.append(new)
 
 
 for i in population:
@@ -137,4 +162,3 @@ for i in range(MAX_GEN):
 
 for i in population:
    print(i.code + ", fitness = " + str(i.fitness))
-
