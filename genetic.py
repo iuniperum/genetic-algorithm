@@ -100,13 +100,13 @@ def crossing_over(parent_1, parent_2):
 
 
 def mutation (chr):
-   prob = np.random.rand(len(chr))
-   for i, bit in enumerate(chr):
+   prob = np.random.rand(len(chr.code))
+   for i, bit in enumerate(chr.code):
        if prob[i] <= MUTATION_PROBABILITY:
             if bit == 1:
-               chr[i] = 0
+               chr.code[i] = 0
             elif bit == 0:
-               chr[i] = 1
+               chr.code[i] = 1
                chr.fitness = count_f(chr.code)
             print ("Mutation occured! ")
 
@@ -140,7 +140,7 @@ for i in range(MAX_GEN):
        population.append(i)
    buffor.clear()
    for i in population:
-       mutation(i.code)
+       mutation(i)
    print("Children: ")
    for i in population:
        print(str(i.code))
