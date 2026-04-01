@@ -5,6 +5,7 @@ import random
 
 """
 LISTA DO STRINGU
+AKTUALIZACJA FITNESSU PO MUTACJI
 """
 
 weights = []
@@ -59,9 +60,10 @@ def count_weight(code):
 
 
 def check_which(list, num):
-   for i, ch in enumerate(list):
-       if num >= ch.range_up and num <= ch.range_down:
+    for i, ch in enumerate(list):
+       if num <= ch.range_up and num >= ch.range_down:
            return i
+    return 0
 
 
 #SELECTION: Parents are chosen randomly
@@ -86,14 +88,12 @@ def crossing_over(parent_1, parent_2):
    CHR_LENGTH = len(population[0].code)
    point = random.randint(1, CHR_LENGTH - 1)
 
-
-   print(parent_1[0:point] + " " + parent_2[point:])
+   print(str(parent_1[0:point]) + " " + str(parent_2[point:]))
    chr_1 = np.concatenate((parent_1[0:point], parent_2[point:]))
    child_1 = chromosome(chr_1)
    buffor.append(child_1)
 
-
-   print(parent_2[0:point] + " " + parent_1[point:])
+   print(str(parent_2[0:point]) + " " + str(parent_1[point:]))
    chr_2 = np.concatenate((parent_2[0:point], parent_1[point:]))
    child_2 = chromosome(chr_2)
    buffor.append(child_2)
@@ -103,11 +103,12 @@ def mutation (chr):
    prob = np.random.rand(len(chr))
    for i, bit in enumerate(chr):
        if prob[i] <= MUTATION_PROBABILITY:
-           if bit == 1:
+            if bit == 1:
                chr[i] = 0
-           elif bit == 0:
+            elif bit == 0:
                chr[i] = 1
-           print ("Mutation occured! ")
+               chr.fitness = count_f(chr.code)
+            print ("Mutation occured! ")
 
 #FIRST POPULATION - RANDOM SOLUTIONS
 print("Please enter size of the population: ")
@@ -129,10 +130,8 @@ for i in range(MAX_GEN):
    while len(buffor) != len(population):
        pair = roulette(population)
        print("Chosen parents: ")
-       print(population[pair[0]].code)
-       print ("fitness = " + str(population[pair[0]].fitness))
-       print(population[pair[1]].code)
-       print ("fitness = " + str(population[pair[1]].fitness))
+       print(str(population[pair[0]].code) + ", fitness = " + str(population[pair[0]].fitness))
+       print(str(population[pair[1]].code) + ", fitness = " + str(population[pair[1]].fitness))
        parents = [population[pair[0]].code, population[pair[1]].code]
        crossing_over(parents[0], parents[1])
        print("\n")
@@ -144,9 +143,9 @@ for i in range(MAX_GEN):
        mutation(i.code)
    print("Children: ")
    for i in population:
-       print(i.code)
+       print(str(i.code))
    print("\n")
 
 
 for i in population:
-   print(i.code + ", fitness = " + str(i.fitness))
+   print(str(i.code) + ", fitness = " + str(i.fitness))
