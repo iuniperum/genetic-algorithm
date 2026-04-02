@@ -4,11 +4,6 @@ import numpy as np
 import sys
 import random
 
-"""
-LISTA DO STRINGU
-AKTUALIZACJA FITNESSU PO MUTACJI
-"""
-
 weights = []
 prices = []
 best_fits = []
@@ -190,5 +185,5 @@ plt.plot(gens, best_fits)
 plt.xlabel('Generation')
 plt.ylabel('Best fitness value')
 plt.title('Best fitness value per generation')
-plt.show()
 plt.savefig("plot.png")
+plt.show()
