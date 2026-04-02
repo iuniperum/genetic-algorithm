@@ -1,3 +1,4 @@
+#%%
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
@@ -126,21 +127,22 @@ if x == 1:
     MAX_GEN = int(input())
     print("Prease enter mutation probability: ")
     MUTATION_PROBABILITY = float(input())
+    print("Please enter size of the population: ")
+    SIZE = int(input())
 elif x == 2:
-    EL_NUM = 8
-    weights = [2, 5, 2, 3, 7, 4, 4, 5]
-    prices = [1, 2, 5, 3, 8, 3, 5, 4]
+    EL_NUM = 11
+    weights = [2, 5, 2, 3, 7, 4, 4, 5, 9, 2, 3]
+    prices = [1, 2, 5, 3, 8, 3, 5, 4, 7, 5, 3]
     MAX_WEIGHT = 20
-    MAX_GEN = 20
+    MAX_GEN = 50
     MUTATION_PROBABILITY = 0.05
+    SIZE = 8
 else: 
     print("Wrong imput!")
     sys.exit()
 
 #FIRST POPULATION - RANDOM SOLUTIONS
-print("Please enter size of the population: ")
-x = int(input())
-for i in range(x):
+for i in range(SIZE):
     code = np.random.randint(2, size=EL_NUM)
     while(count_weight(code) > MAX_WEIGHT):
         code = np.random.randint(2, size=EL_NUM)
@@ -179,3 +181,14 @@ for i in range(MAX_GEN):
 
 for i in population:
    print(str(i.code) + ", fitness = " + str(i.fitness))
+
+gens = []
+for i in range(1, MAX_GEN + 1):
+    gens.append(i)
+
+plt.plot(gens, best_fits)
+plt.xlabel('Generation')
+plt.ylabel('Best fitness value')
+plt.title('Best fitness value per generation')
+plt.show()
+plt.savefig("plot.png")
