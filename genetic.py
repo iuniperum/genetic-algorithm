@@ -1,4 +1,3 @@
-#%%
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
@@ -9,7 +8,7 @@ prices = []
 best_fits = []
 
 population = []
-buffor = []
+buffer = []
 
 class chromosome:
    def __init__(self, code):
@@ -73,12 +72,12 @@ def crossing_over(parent_1, parent_2):
    print(str(parent_1[0:point]) + " " + str(parent_2[point:]))
    chr_1 = np.concatenate((parent_1[0:point], parent_2[point:]))
    child_1 = chromosome(chr_1)
-   buffor.append(child_1)
+   buffer.append(child_1)
 
    print(str(parent_2[0:point]) + " " + str(parent_1[point:]))
    chr_2 = np.concatenate((parent_2[0:point], parent_1[point:]))
    child_2 = chromosome(chr_2)
-   buffor.append(child_2)
+   buffer.append(child_2)
 
 
 def mutation (chr):
@@ -98,9 +97,9 @@ def mutation (chr):
                 else:
                     chr.fitness = count_f(chr.code)
 
+#DETERMINING PARAMETERS
 print("Press 1 to input values, 2 to use default")
 x = int(input())
-
 if x == 1:
     print("Prease enter number of the elements in the knapsack: ")
     EL_NUM = int(input())
@@ -141,10 +140,10 @@ for i in range(SIZE):
     code = np.random.randint(2, size=EL_NUM)
     while(count_weight(code) > MAX_WEIGHT):
         code = np.random.randint(2, size=EL_NUM)
-    #code = ''.join(str(x) for x in code)
     new = chromosome(code)
     population.append(new)
 
+#MAIN
 for i in range(MAX_GEN):
     print("GENERATION NO. " + str(i + 1))
     print("Parents: ")
@@ -153,7 +152,7 @@ for i in range(MAX_GEN):
     best_fits.append(find_best(population))
     print(best_fits)
     print("\n")
-    while len(buffor) != len(population):
+    while len(buffer) != len(population):
         pair = roulette(population)
         print("Chosen parents: ")
         print(str(population[pair[0]].code) + ", fitness = " + str(population[pair[0]].fitness))
@@ -163,9 +162,9 @@ for i in range(MAX_GEN):
         print("\n")
     
     population.clear()
-    for i in buffor:
+    for i in buffer:
         population.append(i)
-    buffor.clear()
+    buffer.clear()
     for i in population:
         mutation(i)
     print("Children: ")
