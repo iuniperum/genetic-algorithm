@@ -10,27 +10,7 @@ AKTUALIZACJA FITNESSU PO MUTACJI
 
 weights = []
 prices = []
-
-print("Prease enter number of the elements in the knapsack: ")
-EL_NUM = int(input())
-
-print("Prease enter weights: ")
-for i in range(EL_NUM):
-    x  = int(input())
-    weights.append(x)
-
-print("Prease enter prices: ")
-for i in range(EL_NUM):
-    x  = int(input())
-    prices.append(x)
-
-print("Prease enter the maximum weight: ")
-MAX_WEIGHT = int(input())
-
-print("Prease enter the maximum number of generations: ")
-MAX_GEN = int(input())
-print("Prease enter mutation probability: ")
-MUTATION_PROBABILITY = float(input())
+best_fits = []
 
 population = []
 buffor = []
@@ -64,6 +44,12 @@ def check_which(list, num):
        if num <= ch.range_up and num >= ch.range_down:
            return i
     return 0
+
+def find_best(list):
+    fits = []
+    for i in list:
+        fits.append(i.fitness)
+    return max(fits)
 
 
 #SELECTION: Parents are chosen randomly
@@ -104,11 +90,52 @@ def mutation (chr):
    for i, bit in enumerate(chr.code):
        if prob[i] <= MUTATION_PROBABILITY:
             if bit == 1:
-               chr.code[i] = 0
+                chr.code[i] = 0
+                if(count_weight(chr.code) > MAX_WEIGHT):
+                    chr.code[i] = 1
+                else:
+                    chr.fitness = count_f(chr.code)
             elif bit == 0:
-               chr.code[i] = 1
-               chr.fitness = count_f(chr.code)
-            print ("Mutation occured! ")
+                chr.code[i] = 1
+                if(count_weight(chr.code) > MAX_WEIGHT):
+                    chr.code[i] = 0
+                else:
+                    chr.fitness = count_f(chr.code)
+
+print("Press 1 to input values, 2 to use default")
+x = int(input())
+
+if x == 1:
+    print("Prease enter number of the elements in the knapsack: ")
+    EL_NUM = int(input())
+
+    print("Prease enter weights: ")
+    for i in range(EL_NUM):
+        x  = int(input())
+        weights.append(x)
+
+    print("Prease enter prices: ")
+    for i in range(EL_NUM):
+        x  = int(input())
+        prices.append(x)
+
+    print("Prease enter the maximum weight: ")
+    MAX_WEIGHT = int(input())
+
+    print("Prease enter the maximum number of generations: ")
+    MAX_GEN = int(input())
+    print("Prease enter mutation probability: ")
+    MUTATION_PROBABILITY = float(input())
+elif x == 2:
+    EL_NUM = 8
+    weights = [2, 5, 2, 3, 7, 4, 4, 5]
+    prices = [1, 2, 5, 3, 8, 3, 5, 4]
+    MAX_WEIGHT = 20
+    MAX_GEN = 20
+    MUTATION_PROBABILITY = 0.05
+else: 
+    print("Wrong imput!")
+    sys.exit()
 
 #FIRST POPULATION - RANDOM SOLUTIONS
 print("Please enter size of the population: ")
@@ -122,29 +149,32 @@ for i in range(x):
     population.append(new)
 
 for i in range(MAX_GEN):
-   print("GENERATION NO. " + str(i + 1))
-   print("Parents: ")
-   for i in population:
-       print(i.code)
-   print("\n")
-   while len(buffor) != len(population):
-       pair = roulette(population)
-       print("Chosen parents: ")
-       print(str(population[pair[0]].code) + ", fitness = " + str(population[pair[0]].fitness))
-       print(str(population[pair[1]].code) + ", fitness = " + str(population[pair[1]].fitness))
-       parents = [population[pair[0]].code, population[pair[1]].code]
-       crossing_over(parents[0], parents[1])
-       print("\n")
-   population.clear()
-   for i in buffor:
-       population.append(i)
-   buffor.clear()
-   for i in population:
-       mutation(i)
-   print("Children: ")
-   for i in population:
-       print(str(i.code))
-   print("\n")
+    print("GENERATION NO. " + str(i + 1))
+    print("Parents: ")
+    for i in population:
+        print(i.code)
+    best_fits.append(find_best(population))
+    print(best_fits)
+    print("\n")
+    while len(buffor) != len(population):
+        pair = roulette(population)
+        print("Chosen parents: ")
+        print(str(population[pair[0]].code) + ", fitness = " + str(population[pair[0]].fitness))
+        print(str(population[pair[1]].code) + ", fitness = " + str(population[pair[1]].fitness))
+        parents = [population[pair[0]].code, population[pair[1]].code]
+        crossing_over(parents[0], parents[1])
+        print("\n")
+    
+    population.clear()
+    for i in buffor:
+        population.append(i)
+    buffor.clear()
+    for i in population:
+        mutation(i)
+    print("Children: ")
+    for i in population:
+        print(str(i.code))
+    print("\n")
 
 
 for i in population:
