@@ -3,7 +3,7 @@
 ### Overview
 This project implements a genetic algorithm for the Knapsack problem. 
 - Genetic algorithm is a metaheuristic inspired by biological mechanisms of natural selection
-- The Knapsack problem is a problem is combinatorial optimisation: Given a set of items, each with a weight and a value, determine which items to choose so that the total weight is less than or equal to a given limit and the total value is maximized.
+- The Knapsack problem is a problem in combinatorial optimisation: Given a set of items, each with a weight and a value, determine which items to choose so that the total weight is less than or equal to a given limit and the total value is maximized.
 
 ### How to run 
 python genetic.py
