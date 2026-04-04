@@ -19,5 +19,5 @@ Python, libraries: matplotlib, numpy, sys, random
 - Creating a new set of parents with the children 
 - Applying random mutations
 - Start of the new generation - children are now parents
-- repeating until the given number of generations is reached
+- Repeating until the given number of generations is reached
 - Creating a graph of best solution by each generation
